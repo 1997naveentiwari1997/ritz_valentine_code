@@ -8,27 +8,30 @@ import os
 
 # --- LOGGING FUNCTION ---
 def log_action(action_type, details=""):
-    """Writes system trace logs to sys_trace.txt"""
+    """Writes logs to file AND prints them to the Streamlit Cloud console"""
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Get Device Info via Session Context (Available in modern Streamlit)
+    # 1. Get Device Details
     try:
         user_agent = st.context.headers.get("User-Agent", "Unknown Device")
     except:
         user_agent = "Unknown Device"
     
-    # Get Location via IP (Simple API call)
+    # 2. Get Location
     try:
-        # We use a try block so the app doesn't crash if offline
         geo = requests.get('http://ip-api.com', timeout=1).json()
         location = f"{geo.get('city', 'Unknown')}, {geo.get('country', 'Unknown')}"
     except:
         location = "Location Unknown"
 
-    log_entry = f"[{timestamp}] | LOC: {location} | DEVICE: {user_agent} | ACTION: {action_type} | DETAILS: {details}\n"
+    log_entry = f"[{timestamp}] | LOC: {location} | DEVICE: {user_agent} | ACTION: {action_type} | DETAILS: {details}"
     
+    # WRITE TO FILE (For local testing)
     with open("sys_trace.txt", "a", encoding="utf-8") as f:
-        f.write(log_entry)
+        f.write(log_entry + "\n")
+        
+    # PRINT TO CONSOLE (This makes it show up in your Streamlit Cloud logs)
+    print(f"VALENTINE_LOG: {log_entry}")
 
 # --- CONFIGURATION ---
 # Replace with your actual image links
@@ -217,3 +220,4 @@ def log_action(action_type, details=""):
     
     # ADD THIS LINE to see logs in the Streamlit Cloud sidebar:
     print(f"LOG: {action_type} - {details}") 
+
