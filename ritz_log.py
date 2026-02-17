@@ -211,3 +211,9 @@ elif st.session_state.step == 'success':
     st.write(" *\"मै तुझसे प्रीत लगा बैठा।\"*")
     st.write("---")
     st.write(" *\"I'm the luckiest person to have you in my life.\"*")
+
+def log_action(action_type, details=""):
+    # ... your existing file-writing code ...
+    
+    # ADD THIS LINE to see logs in the Streamlit Cloud sidebar:
+    print(f"LOG: {action_type} - {details}") 
